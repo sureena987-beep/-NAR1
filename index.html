@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AR กระต่าย 3 ตัววิ่ง - Hiro Marker</title>
+
+  <!-- A-Frame -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <!-- AR.js -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #000;
+    }
+
+    #controls {
+      position: fixed;
+      z-index: 9999;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      width: min(92%, 520px);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background: rgba(20, 20, 20, 0.82);
+      box-shadow: 0 4px 12px rgba(0,0,0,.3);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active {
+      transform: scale(.95);
+    }
+
+    #status {
+      position: fixed;
+      z-index: 9999;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 9px 15px;
+      border-radius: 20px;
+      color: white;
+      background: rgba(0,0,0,.65);
+      font-size: 14px;
+      text-align: center;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="status">🔎 กำลังค้นหา Hiro Marker...</div>
+
+  <div id="controls">
+    <button id="slower">🐢 ช้าลง</button>
+    <button id="stop">⏸ หยุด</button>
+    <button id="faster">🐇 เร็วขึ้น</button>
+  </div>
+
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="logarithmicDepthBuffer: true; colorManagement: true;"
+    arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;"
+    device-orientation-permission-ui="enabled: false">
+
+    <a-assets>
+      <!-- ไม่มีโมเดลภายนอก กระต่ายสร้างจาก A-Frame primitives -->
+    </a-assets>
+
+    <!-- Hiro Marker -->
+    <a-marker id="hiroMarker" preset="hiro" smooth="true" smooth-count="5" smooth-tolerance="0.01" smooth-threshold="2">
+
+      <!-- พื้นวิ่ง -->
+      <a-plane
+        position="0 0 0"
+        rotation="-90 0 0"
+        width="5"
+        height="3"
+        color="#7BC96F"
+        opacity="0.45">
+      </a-plane>
+
+      <!-- กระต่ายทั้ง 3 ตัว -->
+      <a-entity id="rabbits">
+
+        <!-- กระต่ายตัวที่ 1 -->
+        <a-entity class="rabbit" position="-1.5 0.18 0.2" scale="0.45 0.45 0.45">
+          <a-sphere class="body" position="0 0.45 0" scale="0.75 0.55 0.9" color="#FFFFFF"></a-sphere>
+          <a-sphere position="0 0.95 -0.05" radius="0.42" color="#FFFFFF"></a-sphere>
+          <a-sphere position="-0.17 1.10 -0.37" radius="0.06" color="#222"></a-sphere>
+          <a-sphere position="0.17 1.10 -0.37" radius="0.06" color="#222"></a-sphere>
+
+          <!-- หู -->
+          <a-cylinder position="-0.17 1.55 -0.02" radius="0.10" height="0.75" color="#FFFFFF" rotation="0 0 -8"></a-cylinder>
+          <a-cylinder position="0.17 1.55 -0.02" radius="0.10" height="0.75" color="#FFFFFF" rotation="0 0 8"></a-cylinder>
+          <a-cylinder position="-0.17 1.55 -0.07" radius="0.045" height="0.55" color="#F5A6B8" rotation="0 0 -8"></a-cylinder>
+          <a-cylinder position="0.17 1.55 -0.07" radius="0.045" height="0.55" color="#F5A6B8" rotation="0 0 8"></a-cylinder>
+
+          <!-- จมูก -->
+          <a-sphere position="0 1.00 -0.43" radius="0.06" color="#F28CA5"></a-sphere>
+
+          <!-- หาง -->
+          <a-sphere position="0 0.55 0.75" radius="0.18" color="#FFFFFF"></a-sphere>
+
+          <!-- ขา -->
+          <a-box class="leg leg1" position="-0.30 0.15 -0.15" depth="0.28" height="0.30" width="0.18" color="#FFFFFF"></a-box>
+          <a-box class="leg leg2" position="0.30 0.15 -0.15" depth="0.28" height="0.30" width="0.18" color="#FFFFFF"></a-box>
+          <a-box class="leg leg3" position="-0.30 0.15 0.35" depth="0.30" height="0.30" width="0.18" color="#FFFFFF"></a-box>
+          <a-box class="leg leg4" position="0.30 0.15 0.35" depth="0.30" height="0.30" width="0.18" color="#FFFFFF"></a-box>
+        </a-entity>
+
+        <!-- กระต่ายตัวที่ 2 -->
+        <a-entity class="rabbit" position="0 0.18 0" scale="0.45 0.45 0.45">
+          <a-sphere position="0 0.45 0" scale="0.75 0.55 0.9" color="#D9D9D9"></a-sphere>
+          <a-sphere position="0 0.95 -0.05" radius="0.42" color="#D9D9D9"></a-sphere>
+          <a-sphere position="-0.17 1.10 -0.37" radius="0.06" color="#222"></a-sphere>
+          <a-sphere position="0.17 1.10 -0.37" radius="0.06" color="#222"></a-sphere>
+
+          <a-cylinder position="-0.17 1.55 -0.02" radius="0.10" height="0.75" color="#D9D9D9" rotation="0 0 -8"></a-cylinder>
+          <a-cylinder position="0.17 1.55 -0.02" radius="0.10" height="0.75" color="#D9D9D9" rotation="0 0 8"></a-cylinder>
+          <a-cylinder position="-0.17 1.55 -0.07" radius="0.045" height="0.55" color="#F5A6B8" rotation="0 0 -8"></a-cylinder>
+          <a-cylinder position="0.17 1.55 -0.07" radius="0.045" height="0.55" color="#F5A6B8" rotation="0 0 8"></a-cylinder>
+          <a-sphere position="0 1.00 -0.43" radius="0.06" color="#F28CA5"></a-sphere>
+          <a-sphere position="0 0.55 0.75" radius="0.18" color="#D9D9D9"></a-sphere>
+
+          <a-box class="leg leg1" position="-0.30 0.15 -0.15" depth="0.28" height="0.30" width="0.18" color="#D9D9D9"></a-box>
+          <a-box class="leg leg2" position="0.30 0.15 -0.15" depth="0.28" height="0.30" width="0.18" color="#D9D9D9"></a-box>
+          <a-box class="leg leg3" position="-0.30 0.15 0.35" depth="0.30" height="0.30" width="0.18" color="#D9D9D9"></a-box>
+          <a-box class="leg leg4" position="0.30 0.15 0.35" depth="0.30" height="0.30" width="0.18" color="#D9D9D9"></a-box>
+        </a-entity>
+
+        <!-- กระต่ายตัวที่ 3 -->
+        <a-entity class="rabbit" position="1.5 0.18 0.2" scale="0.45 0.45 0.45">
+          <a-sphere position="0 0.45 0" scale="0.75 0.55 0.9" color="#C8B6E8"></a-sphere>
+          <a-sphere position="0 0.95 -0.05" radius="0.42" color="#C8B6E8"></a-sphere>
+          <a-sphere position="-0.17 1.10 -0.37" radius="0.06" color="#222"></a-sphere>
+          <a-sphere position="0.17 1.10 -0.37" radius="0.06" color="#222"></a-sphere>
+
+          <a-cylinder position="-0.17 1.55 -0.02" radius="0.10" height="0.75" color="#C8B6E8" rotation="0 0 -8"></a-cylinder>
+          <a-cylinder position="0.17 1.55 -0.02" radius="0.10" height="0.75" color="#C8B6E8" rotation="0 0 8"></a-cylinder>
+          <a-cylinder position="-0.17 1.55 -0.07" radius="0.045" height="0.55" color="#F5A6B8" rotation="0 0 -8"></a-cylinder>
+          <a-cylinder position="0.17 1.55 -0.07" radius="0.045" height="0.55" color="#F5A6B8" rotation="0 0 8"></a-cylinder>
+          <a-sphere position="0 1.00 -0.43" radius="0.06" color="#F28CA5"></a-sphere>
+          <a-sphere position="0 0.55 0.75" radius="0.18" color="#C8B6E8"></a-sphere>
+
+          <a-box class="leg leg1" position="-0.30 0.15 -0.15" depth="0.28" height="0.30" width="0.18" color="#C8B6E8"></a-box>
+          <a-box class="leg leg2" position="0.30 0.15 -0.15" depth="0.28" height="0.30" width="0.18" color="#C8B6E8"></a-box>
+          <a-box class="leg leg3" position="-0.30 0.15 0.35" depth="0.30" height="0.30" width="0.18" color="#C8B6E8"></a-box>
+          <a-box class="leg leg4" position="0.30 0.15 0.35" depth="0.30" height="0.30" width="0.18" color="#C8B6E8"></a-box>
+        </a-entity>
+
+      </a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    let speed = 1.0;
+    let running = true;
+    const rabbits = document.querySelectorAll('.rabbit');
+    const status = document.getElementById('status');
+    const marker = document.getElementById('hiroMarker');
+
+    // ตำแหน่งเดิมของกระต่าย
+    const home = [
+      {x:-1.5, z:0.2},
+      {x:0, z:0},
+      {x:1.5, z:0.2}
+    ];
+
+    // การเคลื่อนที่แบบวิ่งไป-กลับบนพื้น
+    const phases = [0, Math.PI * 2 / 3, Math.PI * 4 / 3];
+
+    function animate() {
+      const now = performance.now() / 1000;
+
+      rabbits.forEach((rabbit, i) => {
+        if (!running) return;
+
+        // วิ่งเป็นแนวซ้าย-ขวา
+        const t = now * speed + phases[i];
+        const x = home[i].x + Math.sin(t) * 1.0;
+        const z = home[i].z + Math.cos(t * 2) * 0.12;
+
+        // กระโดดขณะวิ่ง
+        const y = 0.18 + Math.max(0, Math.sin(t * 2)) * 0.18;
+
+        rabbit.object3D.position.set(x, y, z);
+
+        // หันตามทิศทาง
+        rabbit.object3D.rotation.y = Math.cos(t) >= 0 ? Math.PI : 0;
+
+        // ขยับขา
+        const legs = rabbit.querySelectorAll('.leg');
+        const swing = Math.sin(t * 4) * 0.35;
+
+        if (legs.length >= 4) {
+          legs[0].object3D.rotation.x = swing;
+          legs[1].object3D.rotation.x = -swing;
+          legs[2].object3D.rotation.x = -swing;
+          legs[3].object3D.rotation.x = swing;
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    document.getElementById('faster').addEventListener('click', () => {
+      speed = Math.min(speed + 0.5, 5);
+      updateStatus();
+    });
+
+    document.getElementById('slower').addEventListener('click', () => {
+      speed = Math.max(speed - 0.5, 0.5);
+      updateStatus();
+    });
+
+    document.getElementById('stop').addEventListener('click', (e) => {
+      running = !running;
+      e.target.textContent = running ? '⏸ หยุด' : '▶ วิ่งต่อ';
+      updateStatus();
+    });
+
+    function updateStatus() {
+      status.textContent = `🐇 ความเร็ว ${speed.toFixed(1)}x | ${running ? 'กำลังวิ่ง' : 'หยุดแล้ว'}`;
+    }
+
+    marker.addEventListener('markerFound', () => {
+      status.textContent = '🐇 พบ Hiro Marker แล้ว! กระต่ายกำลังวิ่ง';
+    });
+
+    marker.addEventListener('markerLost', () => {
+      status.textContent = '🔎 กำลังค้นหา Hiro Marker...';
+    });
+  </script>
+
+</body>
+</html>
